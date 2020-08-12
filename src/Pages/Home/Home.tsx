@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     paddingVertical: RFValue(40),
     paddingHorizontal: RFValue(16),
     backgroundColor: "white",
+    justifyContent: "flex-start",
   },
   title: {
     fontSize: 40,

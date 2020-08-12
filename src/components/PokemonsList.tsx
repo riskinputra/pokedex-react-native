@@ -4,7 +4,7 @@ import { View, StyleSheet, FlatList } from "react-native";
 import { PokemonsContext } from "../context/pokemonContext";
 import * as types from "../store/types";
 
-import { PokemonsItem } from "./index";
+import PokemonsItem from "./PokemonsItem";
 import Axios from "axios";
 
 const PokemonsList = () => {
@@ -57,4 +57,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PokemonsList;
+export default React.memo(PokemonsList);
