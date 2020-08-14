@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { View, StyleSheet, FlatList } from "react-native";
+import { View, StyleSheet, FlatList, TouchableHighlight } from "react-native";
 
 import { PokemonsContext } from "../context/pokemonContext";
 import * as types from "../store/types";
@@ -7,7 +7,8 @@ import * as types from "../store/types";
 import PokemonsItem from "./PokemonsItem";
 import Axios from "axios";
 
-const PokemonsList = () => {
+const PokemonsList = (props: any) => {
+  const { navigate } = props.navigation;
   const { state, dispatch } = useContext(PokemonsContext);
   const setPokemons = (data: any) => {
     dispatch({
@@ -30,10 +31,19 @@ const PokemonsList = () => {
     fetchPokemons();
   }, []);
 
+  const goToNextScreen = (id: number) => {
+    console.log({ id });
+    return navigate("Detail", { id });
+  };
+
   const renderItem = ({ item }: any) => {
     const pokemonSplitUrl = item.url.split("/");
     const getId = pokemonSplitUrl[pokemonSplitUrl.length - 2];
-    return <PokemonsItem id={getId} name={item.name} />;
+    return (
+      <TouchableHighlight onPress={() => goToNextScreen(getId)}>
+        <PokemonsItem id={getId} name={item.name} />
+      </TouchableHighlight>
+    );
   };
 
   return (

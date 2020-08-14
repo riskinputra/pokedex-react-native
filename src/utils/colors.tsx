@@ -99,3 +99,46 @@ export const bgPokemonColor = {
   white: "rgba(154, 157, 161, 0.35)",
   yellow: "rgba(237, 213, 63, 0.7)",
 };
+
+export const bgColor: any = {
+  black: {
+    primary: "#595761",
+    secondary: "#6E7587",
+  },
+  blue: {
+    primary: "#0C69C8",
+    secondary: "#0180C7",
+  },
+  brown: {
+    primary: "#DC7545",
+    secondary: "#D29463",
+  },
+  gray: {
+    primary: "#9298A4",
+    secondary: "#A3A49E",
+  },
+  green: {
+    primary: "#5FBC51",
+    secondary: "#5AC178",
+  },
+  pink: {
+    primary: "#EC8CE5",
+    secondary: "#F3A7E7",
+  },
+  purple: {
+    primary: "#A864C7",
+    secondary: "#C261D4",
+  },
+  red: {
+    primary: "#CE4265",
+    secondary: "#E74347",
+  },
+  white: {
+    primary: "#FFFFFF",
+    secondary: "#DBD8D8",
+  },
+  yellow: {
+    primary: "#EDD53E",
+    secondary: "#FBE273",
+  },
+};

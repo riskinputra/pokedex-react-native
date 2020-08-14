@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { PokemonsContextProvider } from "./src/context/pokemonContext";
 
 import Home from "./src/Pages/Home";
+import Detail from "./src/Pages/Detail";
 import LoadAssets from "./src/components/LoadAssets";
 
 const fonts = {
@@ -16,6 +17,7 @@ const PagesNavigator = () => {
   return (
     <PagesState.Navigator headerMode="none">
       <PagesState.Screen name="Home" component={Home} />
+      <PagesState.Screen name="Detail" component={Detail} />
     </PagesState.Navigator>
   );
 };

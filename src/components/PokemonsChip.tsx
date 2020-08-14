@@ -29,11 +29,10 @@ const styles = StyleSheet.create({
 
 interface PokemonsIconProps {
   types: string;
-  key: string;
   id: string;
 }
 
-const PokemonsIcon = ({ key, id, types }: PokemonsIconProps) => {
+const PokemonsIcon = ({ id, types }: PokemonsIconProps) => {
   const imageIcon: any = images;
   const typeColor: any = typesColor;
   return (
@@ -45,7 +44,7 @@ const PokemonsIcon = ({ key, id, types }: PokemonsIconProps) => {
           shadowColor: typeColor[types].shadow,
         },
       ]}
-      {...{ key, id }}
+      {...{ id }}
     >
       <Image source={imageIcon[types]} style={styles.icon} />
     </View>

@@ -20,12 +20,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const Home = () => {
+const Home = (props: any) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Pokédex</Text>
       <SearchBar />
-      <PokemonsList />
+      <PokemonsList navigation={props.navigation} />
     </View>
   );
 };
