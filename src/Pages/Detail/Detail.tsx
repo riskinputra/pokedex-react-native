@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, StatusBar } from "react-native";
 import Axios from "axios";
-import { result } from "lodash";
+import { result, isEmpty } from "lodash";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { BackNavigation, PokemonDetail } from "../../components";
 import { bgPokemonColor, bgColor } from "../../utils/colors";
+import { SvgUri } from "react-native-svg";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
     justifyContent: "flex-start",
+    position: 'relative'
   },
 });
 
-const Detail = (props: any) => {
+const Detail: any = (props: any) => {
   const { id } = props.route.params;
+  const [isScroll, setIsScroll] = useState(false)
   const [detail, setDetail] = useState({});
   const [species, setSpecies] = useState({});
   const getPokemonDetail = async () => {
@@ -30,15 +33,23 @@ const Detail = (props: any) => {
     setSpecies(resSpecies.data);
   };
 
-  const stausColor: any = bgPokemonColor;
+  const statusColor: any = bgPokemonColor;
   const getColor: string = result(species, "color.name");
+  const dataNotEmpty = !isEmpty(species) && !isEmpty(detail)
+  const imageSource = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${id}.svg`;
+
+  const handleScroll = (scrollValue: number) => {
+    if (scrollValue > 0) {
+      setIsScroll(true)
+    }
+  }
 
   useEffect(() => {
     getPokemonDetail();
   }, []);
 
-  console.log(species);
   return (
+    dataNotEmpty &&
     <View style={[styles.container]}>
       <LinearGradient
         colors={[bgColor[getColor].primary, bgColor[getColor].secondary]}
@@ -46,13 +57,17 @@ const Detail = (props: any) => {
       >
         <StatusBar
           barStyle={getColor === "white" ? "dark-content" : "light-content"}
-          backgroundColor={stausColor[getColor]}
+          backgroundColor={statusColor[getColor]}
         />
-        <BackNavigation />
-        <PokemonDetail id={id} />
+        <BackNavigation isScroll={isScroll} name={result(detail, 'name', '')} />
+        {!isScroll && (
+          <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: -20, zIndex: 9999, position: 'relative', height: 150 }}>
+            <SvgUri width="150px" height="150px" uri={imageSource} />
+          </View>
+        )}
+        <PokemonDetail id={id} detail={detail} species={species} pokemonColor={getColor} handleScroll={handleScroll} />
       </LinearGradient>
-    </View>
-  );
+    </View>)
 };
 
-export default Detail;
+export default React.memo(Detail);

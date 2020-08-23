@@ -32,7 +32,6 @@ const PokemonsList = (props: any) => {
   }, []);
 
   const goToNextScreen = (id: number) => {
-    console.log({ id });
     return navigate("Detail", { id });
   };
 
