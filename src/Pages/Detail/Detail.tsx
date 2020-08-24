@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, StatusBar } from "react-native";
 import Axios from "axios";
-import { result, isEmpty } from "lodash";
+import { result, isEmpty, map, forEach } from "lodash";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { BackNavigation, PokemonDetail } from "../../components";
@@ -22,6 +22,15 @@ const Detail: any = (props: any) => {
   const [isScroll, setIsScroll] = useState(false)
   const [detail, setDetail] = useState({});
   const [species, setSpecies] = useState({});
+  const [weakness, setWeakness] = useState([]);
+  const [evlolution, setEvlolution] = useState([]);
+
+  const getTypeDetail = async (item: any) => {
+    const resTypeDetail = await Axios.get(item.type.url)
+    return await result(resTypeDetail.data, 'damage_relations.double_damage_from')
+  }
+
+
   const getPokemonDetail = async () => {
     const resDetail = await Axios.get(
       `https://pokeapi.co/api/v2/pokemon/${id}`
@@ -29,8 +38,24 @@ const Detail: any = (props: any) => {
     const resSpecies = await Axios.get(
       `https://pokeapi.co/api/v2/pokemon-species/${id}`
     );
+    // Get Weakness
+    const typeMaping = await Promise.all(
+      map(resDetail.data.types, getTypeDetail)
+    )
+    const pokemon_weakness: any = []
+    forEach(typeMaping, (weak: any) => {
+      pokemon_weakness.push(...weak)
+    })
+
+    // Get evlolution
+    const resEvolution = await Axios.get(
+      result(resSpecies, 'data.evolution_chain.url')
+    )
+
     setDetail(resDetail.data);
     setSpecies(resSpecies.data);
+    setWeakness(pokemon_weakness)
+    setEvlolution(resEvolution.data.chain)
   };
 
   const statusColor: any = bgPokemonColor;
@@ -65,7 +90,7 @@ const Detail: any = (props: any) => {
             <SvgUri width="150px" height="150px" uri={imageSource} />
           </View>
         )}
-        <PokemonDetail id={id} detail={detail} species={species} pokemonColor={getColor} handleScroll={handleScroll} />
+        <PokemonDetail id={id} detail={detail} species={species} pokemonColor={getColor} handleScroll={handleScroll} weakness={weakness} evlolution={evlolution} />
       </LinearGradient>
     </View>)
 };

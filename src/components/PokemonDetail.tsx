@@ -68,8 +68,10 @@ interface PokemonDetailProps {
   species: object;
   pokemonColor: string;
   handleScroll: any;
+  weakness: any;
+  evlolution: any;
 }
-const PokemonDetail = ({ detail, species, pokemonColor, handleScroll }: PokemonDetailProps) => {
+const PokemonDetail = ({ detail, species, pokemonColor, handleScroll, weakness, evlolution }: PokemonDetailProps) => {
   const [isScroll, setIsScroll] = useState(false)
   const { name, types }: any = detail
   const pokemonType = map(types, (type, index) => (
@@ -116,8 +118,8 @@ const PokemonDetail = ({ detail, species, pokemonColor, handleScroll }: PokemonD
             bounces={false}
             {...scrollHandler}
           >
-            <PokemonStat status={result(detail, 'stats')} bgColor={statusColor[pokemonColor].primary} />
-            <PokemonEvo />
+            <PokemonStat status={result(detail, 'stats')} colors={statusColor[pokemonColor]} weakness={weakness} />
+            <PokemonEvo evlolution={evlolution} colors={statusColor[pokemonColor].primary} />
             <PokemonMoves />
 
           </Animated.ScrollView>
