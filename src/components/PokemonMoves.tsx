@@ -37,7 +37,6 @@ const Item = ({ detail, name }: any) => (
 );
 
 const PokemonMoves = ({ moves }: PokemonMovesProps) => {
-  console.log('object', moves)
   const renderItem = ({ item }: any) => (
     <Item detail={item.detail} name={item.name} />
   );
