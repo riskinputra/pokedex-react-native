@@ -23,9 +23,10 @@ interface TabLabelProps {
   currentIndex: Animated.Node<number>;
   bgColor: string;
   name: string;
+  onPress: () => void;
 }
 
-const TabLabel = ({ index, currentIndex, bgColor, name }: TabLabelProps) => {
+const TabLabel = ({ index, currentIndex, bgColor, name, onPress }: TabLabelProps) => {
   const opacity = interpolate(currentIndex, {
     inputRange: [index - 1, index, index + 1],
     outputRange: [0, 1, 0],
@@ -57,7 +58,7 @@ const TabLabel = ({ index, currentIndex, bgColor, name }: TabLabelProps) => {
           {name}
         </Text>
       </Animated.View>
-      <Animated.View style={{ zIndex: 0, position: 'relative' }}>
+      <Animated.View style={{ zIndex: 0, position: 'relative' }} {...{ onPress }}>
         <Text style={[styles.tabsLabel, { color: '#000000' }]}>{name}</Text>
       </Animated.View>
     </Animated.View>

@@ -27,13 +27,19 @@ const styles = StyleSheet.create({
 
 interface BackNavigationProps {
   isScroll: boolean;
-  name: string
+  name: string;
+  navigation: any;
 }
 
-const BackNavigation = ({ isScroll, name }: BackNavigationProps) => {
+const BackNavigation = ({ isScroll, name, navigation }: BackNavigationProps) => {
+  const { navigate } = navigation;
+
+  const backToHome = () => {
+    return navigate("Home");
+  };
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.buttonArrow}>
+      <TouchableOpacity style={styles.buttonArrow} onPress={() => backToHome()}>
         <Ionicons
           name="md-arrow-round-back"
           size={24}

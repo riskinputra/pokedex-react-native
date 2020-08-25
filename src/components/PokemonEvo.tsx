@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, Dimensions, StyleSheet, Image } from 'react-native'
 import { SvgUri } from 'react-native-svg';
-import { result } from 'lodash';
+import { result, isEmpty } from 'lodash';
 
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
@@ -24,11 +24,11 @@ const styles = StyleSheet.create({
 })
 
 interface PokemonEvoProps {
-  evlolution: any;
+  evolution: any;
   colors: string
 }
 
-const PokemonEvo = ({ evlolution, colors }: PokemonEvoProps) => {
+const PokemonEvo = ({ evolution, colors }: PokemonEvoProps) => {
   const getId = (url: string) => {
     const splitUrl = url.split('/')
     return splitUrl[splitUrl.length - 2]
@@ -61,9 +61,20 @@ const PokemonEvo = ({ evlolution, colors }: PokemonEvoProps) => {
       </View>
     )
   }
+  const evolution2 = !isEmpty(evolution) ? evolution.evolves_to[0] : {}
+  const evolution3 = !isEmpty(evolution2) ? evolution2.evolves_to[0] : {}
+  const evolution4 = !isEmpty(evolution3) ? evolution3.evolves_to[0] : {}
+
+  const getEvo = !isEmpty(evolution) && (
+    <View>
+      {!isEmpty(evolution2) && listOfEvolution({ url: result(evolution, 'species.url', ''), name: result(evolution, 'species.name', ''), lv: result(evolution2.evolution_details[0], 'min_level', 0) }, { url: result(evolution2, 'species.url', ''), name: result(evolution2, 'species.name', '') })}
+      {!isEmpty(evolution3) && listOfEvolution({ url: result(evolution2, 'species.url', ''), name: result(evolution2, 'species.name', ''), lv: result(evolution3.evolution_details[0], 'min_level', 0) }, { url: result(evolution3, 'species.url', ''), name: result(evolution3, 'species.name', '') })}
+      {!isEmpty(evolution4) && listOfEvolution({ url: result(evolution3, 'species.url', ''), name: result(evolution3, 'species.name', ''), lv: result(evolution4.evolution_details[0], 'min_level', 0) }, { url: result(evolution4, 'species.url', ''), name: result(evolution4, 'species.name', '') })}
+    </View>
+  )
   return (
     <View style={styles.container}>
-      {listOfEvolution({ url: result(evlolution, 'species.url', ''), name: result(evlolution, 'species.name', ''), lv: result(evlolution.evolves_to[0].evolution_details[0], 'min_level', 0) }, { url: result(evlolution.evolves_to[0], 'species.url', ''), name: result(evlolution.evolves_to[0], 'species.name', '') })}
+      {getEvo}
     </View>
   )
 }

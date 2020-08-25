@@ -23,11 +23,18 @@ const Detail: any = (props: any) => {
   const [detail, setDetail] = useState({});
   const [species, setSpecies] = useState({});
   const [weakness, setWeakness] = useState([]);
-  const [evlolution, setEvlolution] = useState([]);
+  const [evolution, setEvolution] = useState([]);
+  const [moves, setMoves] = useState([]);
 
   const getTypeDetail = async (item: any) => {
     const resTypeDetail = await Axios.get(item.type.url)
     return await result(resTypeDetail.data, 'damage_relations.double_damage_from')
+  }
+
+  const getMovesApi = async (item: any) => {
+    const resMovesDetail = await Axios.get(item.move.url)
+    const getDetail = resMovesDetail.data
+    return await { name: item.move.name, detail: result(getDetail.effect_entries[0], 'short_effect') }
   }
 
 
@@ -39,23 +46,33 @@ const Detail: any = (props: any) => {
       `https://pokeapi.co/api/v2/pokemon-species/${id}`
     );
     // Get Weakness
+    const pokemon_weakness: any = []
     const typeMaping = await Promise.all(
       map(resDetail.data.types, getTypeDetail)
     )
-    const pokemon_weakness: any = []
     forEach(typeMaping, (weak: any) => {
       pokemon_weakness.push(...weak)
     })
 
-    // Get evlolution
+    // Get evolution
     const resEvolution = await Axios.get(
       result(resSpecies, 'data.evolution_chain.url')
     )
 
+    // Get moves
+    const pokemon_moves: any = []
+    const movesMaping = await Promise.all(
+      map(resDetail.data.moves, getMovesApi)
+    )
+    forEach(movesMaping, (move: any) => {
+      pokemon_moves.push(move)
+    })
+
     setDetail(resDetail.data);
     setSpecies(resSpecies.data);
     setWeakness(pokemon_weakness)
-    setEvlolution(resEvolution.data.chain)
+    setEvolution(resEvolution.data.chain)
+    setMoves(pokemon_moves)
   };
 
   const statusColor: any = bgPokemonColor;
@@ -84,13 +101,13 @@ const Detail: any = (props: any) => {
           barStyle={getColor === "white" ? "dark-content" : "light-content"}
           backgroundColor={statusColor[getColor]}
         />
-        <BackNavigation isScroll={isScroll} name={result(detail, 'name', '')} />
+        <BackNavigation isScroll={isScroll} name={result(detail, 'name', '')} navigation={props.navigation} />
         {!isScroll && (
           <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: -20, zIndex: 9999, position: 'relative', height: 150 }}>
             <SvgUri width="150px" height="150px" uri={imageSource} />
           </View>
         )}
-        <PokemonDetail id={id} detail={detail} species={species} pokemonColor={getColor} handleScroll={handleScroll} weakness={weakness} evlolution={evlolution} />
+        <PokemonDetail id={id} detail={detail} species={species} pokemonColor={getColor} handleScroll={handleScroll} weakness={weakness} evolution={evolution} moves={moves} />
       </LinearGradient>
     </View>)
 };

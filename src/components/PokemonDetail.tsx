@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   },
   containerPokemon: {
     flex: 1,
-    marginTop: 16,
+    marginTop: 32,
     alignItems: "center",
   },
   pokemonName: {
@@ -69,9 +69,10 @@ interface PokemonDetailProps {
   pokemonColor: string;
   handleScroll: any;
   weakness: any;
-  evlolution: any;
+  evolution: any;
+  moves: any;
 }
-const PokemonDetail = ({ detail, species, pokemonColor, handleScroll, weakness, evlolution }: PokemonDetailProps) => {
+const PokemonDetail = ({ detail, species, pokemonColor, handleScroll, weakness, evolution, moves }: PokemonDetailProps) => {
   const [isScroll, setIsScroll] = useState(false)
   const { name, types }: any = detail
   const pokemonType = map(types, (type, index) => (
@@ -106,7 +107,22 @@ const PokemonDetail = ({ detail, species, pokemonColor, handleScroll, weakness, 
           <Text style={styles.pokemonDesc}>{result(pokemonDescription, 'flavor_text', '')}</Text>
         </View>
         <View style={[styles.pokemonTabs]}>
-          {tabLabel.map((name, index) => (<TabLabel key={index} currentIndex={divide(x, width)} name={name} bgColor={statusColor[pokemonColor].primary} {...{ index }} />))}
+          {tabLabel.map((name, index) => (
+            <TabLabel
+              key={index}
+              currentIndex={divide(x, width)}
+              name={name}
+              bgColor={statusColor[pokemonColor].primary}
+              {...{ index }}
+              onPress={() => {
+                if (scroll.current) {
+                  scroll.current
+                    .getNode()
+                    .scrollTo({ x: width * (index + 1), animated: true });
+                }
+              }}
+            />
+          ))}
         </View>
         <Animated.View>
           <Animated.ScrollView
@@ -119,8 +135,8 @@ const PokemonDetail = ({ detail, species, pokemonColor, handleScroll, weakness, 
             {...scrollHandler}
           >
             <PokemonStat status={result(detail, 'stats')} colors={statusColor[pokemonColor]} weakness={weakness} />
-            <PokemonEvo evlolution={evlolution} colors={statusColor[pokemonColor].primary} />
-            <PokemonMoves />
+            <PokemonEvo evolution={evolution} colors={statusColor[pokemonColor].primary} />
+            <PokemonMoves moves={moves} />
 
           </Animated.ScrollView>
         </Animated.View>
